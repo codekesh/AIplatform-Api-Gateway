@@ -1,0 +1,59 @@
+server:
+  port: 9000
+
+spring:
+  cloud:
+    gateway:
+      server:
+        webflux:
+          globalcors:
+            add-to-simple-url-handler-mapping: true
+            cors-configurations:
+              "[/**]":
+                allowedOrigins:
+                  - "http://localhost:5173"
+                allowedMethods:
+                  - GET
+                  - POST
+                  - PUT
+                  - DELETE
+                  - OPTIONS
+                allowedHeaders:
+                  - "*"
+                allowCredentials: true
+
+          routes:
+            - id: auth-service
+              uri: http://localhost:8080
+              predicates:
+                - Path=/auth,/auth/**
+
+            - id: tracking-service-trackers
+              uri: http://localhost:8081
+              predicates:
+                - Path=/trackers,/trackers/**
+
+            - id: tracking-service-diet
+              uri: http://localhost:8081
+              predicates:
+                - Path=/tracking,/tracking/**
+
+            - id: tracking-service-foods
+              uri: http://localhost:8081
+              predicates:
+                - Path=/foods,/foods/**
+
+            - id: tracking-service-dashboard
+              uri: http://localhost:8081
+              predicates:
+                - Path=/dashboard,/dashboard/**
+
+            - id: analytics-service
+              uri: http://localhost:8082
+              predicates:
+                - Path=/analytics,/analytics/**
+
+            - id: ai-service
+              uri: http://localhost:8083
+              predicates:
+                - Path=/ai,/ai/**
